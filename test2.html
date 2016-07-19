@@ -6,7 +6,7 @@
 </head>
 <body>
 	<div id="wrap">
-		<canvas style="width:100%;height:100%" width="1000" height="600" id="test"></canvas>
+		<canvas id="test"></canvas>
 	</div>
 </body>
 <script src="http://s3.qhimg.com/static/2cf8bd87a8b17759/hidpiCanva.js"></script>
@@ -16,8 +16,8 @@
 		var canvas = document.getElementById(tag_id);
 		_this.canvas = {
 			el: canvas,
-			w: canvas.offsetWidth,
-			h: canvas.offsetHeight
+			w: window.innerWidth,
+			h: window.innerHeight
 		};
 		_this.initCanvas();
 		_this.canvasSize();
@@ -31,8 +31,8 @@
 		
 		canvasSize: function(){
 			var _this = this;
-			_this.canvas.el.width = _this.canvas.width;
-			_this.canvas.el.height = _this.canvas.height;
+			_this.canvas.el.width = _this.canvas.w;
+			_this.canvas.el.height = _this.canvas.h;
 		}
 	};
 	
@@ -48,12 +48,12 @@
 		initSpirit: function(){
 			var _this = this;
 			_this.spirit = {
-				clearColor: 'rgba(255, 255, 255, 0.5)',
+				clearColor: 'rgba(227, 25, 25, 1)',
 				shape: {
 					isimg: true,
 					src: 'http://pic.58pic.com/58pic/15/30/52/29s58PIC2gf_1024.jpg',
-					width: 2,
-					height: 1,
+					width: 50,
+					height: 50,
 					type: 'line',
 					color: 'hsl(100, 100%, 62%)',
 					a: 1
@@ -68,7 +68,7 @@
 					x: random(0, _this.canvasWrap.canvas.w),
 					y: 0,
 					angle: 90,
-					v: 5,
+					v: 2,
 					hit: random(_this.canvasWrap.canvas.h * .8, _this.canvasWrap.canvas.h * .9)
 				},
 				animate: {
@@ -103,8 +103,8 @@
 					_this.canvasWrap.canvas.ctx.drawImage(img,_this.spirit.move.x,_this.spirit.move.y,_this.spirit.shape.width,_this.spirit.shape.height);
 				}
 			} else {
-				_this.canvas.ctx.fillStyle = _this.spirit.shape.color;
-				_this.canvas.ctx.fillRect(_this.spirit.move.x,_this.spirit.move.y, _this.spirit.shape.width, _this.spirit.shape.height);
+				_this.canvasWrap.canvas.ctx.fillStyle = _this.spirit.shape.color;
+				_this.canvasWrap.canvas.ctx.fillRect(_this.spirit.move.x,_this.spirit.move.y, _this.spirit.shape.width, _this.spirit.shape.height);
 			}
 			_this.spiFall();
 		},
@@ -121,7 +121,8 @@
 			_this.spirit.move.vy = Math.sin(interiorAngle) * _this.spirit.move.v;
 			if(_this.spirit.move.y < _this.spirit.move.hit){
 				_this.spirit.move.y += _this.spirit.move.vy;
-				// _this.spirit.move.x += _this.spirit.move.vx;
+				console.log(_this.spirit.move.y);
+				_this.spirit.move.x += _this.spirit.move.vx;
 			} else {
 				_this.initSpirit();
 				console.log('finish');
@@ -150,12 +151,12 @@
 				var num = _this.spirit.num.value;
 			}
 			for(var i = 0; i< num; i++){
-				// (function(j){
-				// 	setTimeout(function(){
-				// 		var o = _this.initSpirit();
-				// 		_this.drops.push(o);
-				// 	}, j*200);
-				// }(i));
+				(function(j){
+					setTimeout(function(){
+						var o = new Falling();
+						_this.drops.push(o);
+					}, j*200);
+				}(i));
 				var o = new Falling(c);
 				_this.drops.push(o);
 			}

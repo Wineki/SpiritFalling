@@ -35,7 +35,7 @@
 			this.a = 1;
 			this.va = .96;
 			this.angle = 45;
-			this.isimg = 1;
+			this.isimg = 0;
 			this.src = 'http://pic.58pic.com/58pic/15/30/52/29s58PIC2gf_1024.jpg';
 		}
 
@@ -78,7 +78,7 @@
 			/*下落*/
 			update: function() {
 				if(this.y < this.hit){
-					this.y += this.vy;
+					this.y += this.vy;console.log(this.y);
 				} else {
 					if(this.a > .03){
 						this.w += this.vw;
