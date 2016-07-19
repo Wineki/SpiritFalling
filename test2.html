@@ -9,7 +9,6 @@
 		<canvas id="test"></canvas>
 	</div>
 </body>
-<script src="http://s3.qhimg.com/static/2cf8bd87a8b17759/hidpiCanva.js"></script>
 <script>
 	function Canvas(tag_id){
 		var _this = this;
@@ -37,9 +36,9 @@
 	};
 	
 	
-	function Falling(canvas , params){
+	function Falling(params){
 		var _this = this;
-		_this.canvasWrap = canvas;
+		_this.canvasWrap = window.canvas;
 		_this.drops = [];
 		_this.initSpirit();
 	};
@@ -73,7 +72,7 @@
 				},
 				animate: {
 					bumb:{
-						value: false,
+						value: true,
 						pxpm: _this.canvasWrap.canvas.w/20,
 						collarg: 0.8
 					},
@@ -132,15 +131,15 @@
 		/*回弹效果*/
 		bumb: function(t){
 			var _this = this;
-			_this.oldx = _this.move.x;
-			_this.oldy = _this.move.y;
-			_this.move.vy = _this.move.vy + _this.g * t;
-			_this.y += t * _this.vy * _this.pxpm;
-			if(_this.move.y > _this.canvas.h - _this.spirit.shape.height || _this.move.y < _this.spirit.shape.height){
-				_this.move.y = _this.move.y < _this.spirit.shape.height ? _this.spirit.shape.height : (_this.canvas.h - _this.spirit.shape.height);
-				_this.move.vy = -_this.move.vy * _this.collarg;
+			_this.oldx = _this.spirit.move.x;
+			_this.oldy = _this.spirit.move.y;
+			_this.spirit.move.vy = _this.spirit.move.vy + _this.g * t;
+			_this.spirit.move.y += t * _this.spirit.move.vy * _this.spirit.animate.bumb.pxpm;
+			if(_this.spirit.move.y > _this.canvasWrap.canvas.h - _this.spirit.shape.height || _this.spirit.move.y < _this.spirit.shape.height){
+				_this.spirit.move.y = _this.spirit.move.y < _this.spirit.shape.height ? _this.spirit.shape.height : (_this.canvasWrap.canvas.h - _this.spirit.shape.height);
+				_this.spirit.move.vy = -_this.spirit.move.vy * _this.collarg;
 			}
-			_this.draw();
+			_this.spiDraw();
 		},
 		
 		setup: function(){
@@ -157,7 +156,7 @@
 						_this.drops.push(o);
 					}, j*200);
 				}(i));
-				var o = new Falling(c);
+				var o = new Falling();
 				_this.drops.push(o);
 			}
 		},
@@ -187,8 +186,8 @@
 	function random(min, max) {
 	    return Math.random() * (max - min) + min;
 	}
-	var c = new Canvas('test');
-	var o = new Falling(c);
+	window.canvas = new Canvas('test');
+	var o = new Falling();
 	t0 = new Date();
 	o.setup();
 	o.start();
